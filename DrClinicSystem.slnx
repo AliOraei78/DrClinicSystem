@@ -6,4 +6,5 @@
   <Project Path="DrClinicSystem.Application/DrClinicSystem.Application.csproj" />
   <Project Path="DrClinicSystem.Core/DrClinicSystem.Core.csproj" />
   <Project Path="DrClinicSystem.Infrastructure/DrClinicSystem.Infrastructure.csproj" />
+  <Project Path="DrClinicSystem.Tests/DrClinicSystem.Tests.csproj" Id="20482a24-fb89-4ac3-b8ba-f651a8b4659f" />
 </Solution>
