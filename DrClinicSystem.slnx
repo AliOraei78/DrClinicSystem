@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
   <Project Path="DrClinicSystem.Api/DrClinicSystem.Api.csproj" />
   <Project Path="DrClinicSystem.Application/DrClinicSystem.Application.csproj" />
   <Project Path="DrClinicSystem.Core/DrClinicSystem.Core.csproj" />

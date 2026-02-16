@@ -34,3 +34,39 @@ Complete understanding of service lifetimes (Transient, Scoped, Singleton)
 - Scoped is the most common lifetime in web applications (matches HTTP request scope)
 - Transient is safe for stateless operations but can be expensive if overused
 - Singleton should be used carefully (thread-safety, memory leaks)
+
+## Day 2: Advanced Dependency Injection  
+Factory Methods, Options Pattern, Named Services, Decorators
+
+**Completed Today:**
+- Mastered advanced DI patterns in ASP.NET Core with practical implementation in DrClinicSystem project
+- Implemented **Factory Methods**:
+  - Created `NotificationFactory` to dynamically resolve notification channels (email/sms) based on type
+  - Used `IServiceProvider.GetRequiredKeyedService` for safe keyed resolution
+- Implemented **Options Pattern**:
+  - Defined `ClinicOptions` strongly-typed configuration class
+  - Configured with `Configure<ClinicOptions>` in Program.cs
+  - Injected via `IOptions<ClinicOptions>` and used in `AppointmentService`
+  - Tested with `/api/test/appointment-service` endpoint (displayed clinic settings)
+- Implemented **Named/Keyed Services**:
+  - Defined `INotificationChannel` interface in Core
+  - Created concrete implementations (`EmailChannel`, `SmsChannel`) in Infrastructure
+  - Registered with `AddKeyedTransient` in Program.cs
+  - Injected with `[FromKeyedServices("email")]` and `[FromKeyedServices("sms")]` in `NotificationService`
+- Implemented **Decorator Pattern**:
+  - Created `LoggingAppointmentServiceDecorator` to log before/after appointment scheduling
+  - Used Scrutor or manual decoration to wrap base `AppointmentService`
+  - Demonstrated behavior extension without modifying original class
+- Tested all patterns in practice:
+  - Factory: dynamic channel selection via query parameter `type`
+  - Options: clinic settings correctly loaded and displayed
+  - Named Services: correct channel selected and executed
+  - Decorator: logging appeared in console during scheduling
+- Updated README with explanations, structure, and usage examples
+
+**Key Learnings:**
+- Factory Methods: Dynamic resolution of implementations at runtime (great for pluggable strategies)
+- Options Pattern: Strongly-typed, validated, configuration injection (better than raw IConfiguration)
+- Named/Keyed Services: Multiple implementations of same interface with safe selection via keys (.NET 8+)
+- Decorators: Open-Closed Principle in practice – add behavior (logging, caching, metrics) without changing core classes
+- All patterns respect Clean/Onion: Core stays pure, Application owns contracts, Infrastructure provides implementations

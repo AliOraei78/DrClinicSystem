@@ -1,5 +1,8 @@
+using DrClinicSystem.Application.Services;
 using DrClinicSystem.Core.Services;
+using DrClinicSystem.Infrastructure.Services;
 using Microsoft.OpenApi;
+using Scrutor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +31,27 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddKeyedTransient<IMessageService, TransientMessageService>("transient");
 builder.Services.AddKeyedScoped<IMessageService, ScopedMessageService>("scoped");
 builder.Services.AddKeyedSingleton<IMessageService, SingletonMessageService>("singleton");
+
+builder.Services.AddKeyedTransient<INotificationService, EmailNotificationService>("email");
+builder.Services.AddKeyedTransient<INotificationService, SmsNotificationService>("sms");
+builder.Services.AddTransient<NotificationFactory>();
+
+builder.Services.Configure<ClinicOptions>(
+    builder.Configuration.GetSection("Clinic"));
+
+builder.Services.AddKeyedTransient<INotificationChannel, EmailChannel>("email");
+builder.Services.AddKeyedTransient<INotificationChannel, SmsChannel>("sms");
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<AppointmentService>();
+
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.Decorate<IAppointmentService, LoggingAppointmentServiceDecorator>();
+
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<AppointmentService>()
+    .AddClasses(classes => classes.AssignableTo<IAppointmentService>())
+    .AsImplementedInterfaces()
+    .WithScopedLifetime());
 
 var app = builder.Build();
 
